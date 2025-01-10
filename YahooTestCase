@@ -1,0 +1,81 @@
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.testng.Assert;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+
+import java.util.Random;
+
+
+public class YahooTest {
+
+    WebDriver driver;
+    String url = "https://login.yahoo.com/";
+    String FirstName = "Joshua";
+    String LastName = "Jackson";
+    int NumberGenerator = new Random().nextInt(99999);
+// Here we've defined the objects that we're going to use to run the testcase
+    
+    @BeforeTest
+    public void BrowserSetup() {
+
+        System.out.println("Initiating the Test");
+
+        String pathChromeDriver = "d:\\chromedriver-win64/chromedriver.exe";
+        System.setProperty("webdriver.chrome.driver", pathChromeDriver);
+
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--remote-allow-origins=*");
+
+        driver = new ChromeDriver(options);
+        driver.manage().window().maximize();
+        driver.get(url);
+        String CurrentURL = driver.getCurrentUrl();
+        Assert.assertEquals(url,CurrentURL);
+    } // Setting up the Browser before the test
+
+    @Test(priority = 1)
+    public void OpenCreateAccountPage() {
+        WebElement CreateAccountButton = driver.findElement(By.xpath("//a[@href='/account/create?specId=yidregsimplified&done=https%3A%2F%2Fwww.yahoo.com']"));
+        CreateAccountButton.click();
+        WebElement CreateAccountPageVerify = driver.findElement(By.xpath("//h2[contains(text(),'Create a Yahoo')]"));
+        Assert.assertTrue(CreateAccountPageVerify.isDisplayed());
+    } // Here we open the test page and we make sure that we're on the right page by using Assert
+
+@Test(priority = 2)
+    public void FillTheEmptyFields(){
+        WebElement FirstNameField = driver.findElement(By.xpath("//input[@id='usernamereg-firstName']"));
+        FirstNameField.sendKeys(FirstName);
+        WebElement LastNameField = driver.findElement(By.xpath("//input[@id='usernamereg-lastName']"));
+        LastNameField.sendKeys(LastName);
+        WebElement YahooAddressField = driver.findElement(By.id("usernamereg-userId"));
+        YahooAddressField.sendKeys(FirstName + "_" + LastName + NumberGenerator);
+        WebElement PasswordField = driver.findElement(By.id("usernamereg-password"));
+        PasswordField.sendKeys("@PassWordPassWord@" + NumberGenerator);
+        WebElement MonthField = driver.findElement(By.id("usernamereg-month"));
+        MonthField.sendKeys("May");
+        WebElement DayField = driver.findElement(By.id("usernamereg-day"));
+        DayField.sendKeys("5");
+        WebElement YearField = driver.findElement(By.id("usernamereg-year"));
+        YearField.sendKeys("2001");
+        WebElement NextRegisterButton = driver.findElement(By.id("reg-submit-button"));
+        NextRegisterButton.click();
+        WebElement ConfirmRegister = driver.findElement(By.id("reg-whatsapp-button"));
+        Assert.assertTrue(ConfirmRegister.isDisplayed());
+    } // Here we've filled the Register form and we've verified if our test passed to the next step
+
+    @AfterTest
+    public void CloseBrowser(){
+        System.out.println("The testcase was completed. Closing the browser..");
+        driver.close();
+    } // Since there is nothing left to test, we're closing the browser.
+
+// By completing this testcase we've verified if the customer can fill the Register form and proceed to the next step which is a phone number verification to avoid bots
+}
+
+
+
