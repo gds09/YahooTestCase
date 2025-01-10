@@ -44,7 +44,7 @@ public class YahooTest {
         CreateAccountButton.click();
         WebElement CreateAccountPageVerify = driver.findElement(By.xpath("//h2[contains(text(),'Create a Yahoo')]"));
         Assert.assertTrue(CreateAccountPageVerify.isDisplayed());
-    } // Here we open the test page and we make sure that we're on the right page by using Assert
+    } // Here we open the Register page and we make sure that we're on the right page by using Assert
 
 @Test(priority = 2)
     public void FillTheEmptyFields(){
@@ -73,8 +73,6 @@ public class YahooTest {
         System.out.println("The testcase was completed. Closing the browser..");
         driver.close();
     } // Since there is nothing left to test, we're closing the browser.
-
-// By completing this testcase we've verified if the customer can fill the Register form and proceed to the next step which is a phone number verification to avoid bots
 }
 
 
